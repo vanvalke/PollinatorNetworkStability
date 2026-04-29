@@ -39,7 +39,8 @@ bee.data <- bee.data.raw  %>%
                 species = stringr::str_replace(species, "rufocinctus.orange", "rufocinctus")) %>%
   dplyr::filter(caste %in% c("q", "w", "m", "old.q"),
                 behaviour %in% c("frg", "frg+ns", "ns", "ft", "rob.prim","rob.sec","rob.base"),
-                species %in% c("appositus", "bifarius", "californicus", "flavifrons", "nevadensis", "mixtus", "occidentalis", "rufocinctus", "insularis"),
+                species %in% c("appositus", "bifarius", "californicus", "flavifrons", "nevadensis", 
+                               "mixtus", "occidentalis", "rufocinctus", "insularis"),
                 site.code %in% c("AW", "CC", "FP", "GS", "RH", "SP")) %>%
   dplyr::mutate(caste = stringr::str_replace(caste, "old.q", "q")) %>%
   dplyr::select(site:resource.coll) %>%
