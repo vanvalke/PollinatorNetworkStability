@@ -9,3 +9,6 @@
 # ignore PDF files
 *.pdf
 
+# ignore local assistant guidance
+CLAUDE.md
+
