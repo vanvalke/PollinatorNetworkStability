@@ -3,6 +3,12 @@
 ## Cenci & Saavedra (2018) — *Structural Stability of Nonlinear Population Dynamics* (Phys. Rev. E)
 Extends the structural stability framework — previously limited to linear Lotka-Volterra dynamics — to a broad class of nonlinear functional responses. Also extends it to stochastic systems with finite populations. Core takeaway: structural stability analysis doesn't require linearity.
 
+## Cenci et al. (2018) — *Estimating the Effect of the Reorganization of Interactions on the Adaptability of Species to Changing Environments* (J. Theoretical Biology)
+Introduces the concept of an **adaptation space** — the set of environmental conditions that a group of species can make compatible with its persistence through reorganization of interactions. Groups with larger adaptation spaces are more likely to persist under novel environments. Shows that species present in both control and perturbed communities tend to have the largest adaptation spaces, providing a framework for identifying conservation priorities.
+
+## Cenci et al. (2018) — *Rethinking the Importance of the Structure of Ecological Networks Under an Environment-Dependent Framework* (Ecology & Evolution)
+Argues that the importance of any network structure (e.g., nestedness, modularity) cannot be assessed independently of the environmental context — conclusions about structural advantage are inconsistent when drawn from perturbation-tolerance alone. Proposes an **environment-dependent framework** that links network structure to community dynamics under varying external conditions, revealing the limits at which communities can tolerate environmental change.
+
 ## Saavedra (2024) — *The Feasibility Principle in Community Ecology*
 Proposes a unifying "feasibility principle" with 3 postulates: communities persist for environmental conditions constrained by their interaction structure; self-organization maximizes that feasibility domain; and transitions follow least-change paths in environmental space. Frames conservation in terms of feasibility under climate change.
 
