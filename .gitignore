@@ -6,3 +6,6 @@
 *.Rproj
 .Rproj.user
 
+# ignore PDF files
+*.pdf
+
