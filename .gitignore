@@ -9,6 +9,13 @@
 # ignore PDF files
 *.pdf
 
+# ignore PNG files
+*.png
+
+# ignore R data files
+*.rds
+*.RDS
+
 # ignore local assistant guidance
 CLAUDE.md
 
