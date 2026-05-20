@@ -17,7 +17,7 @@ Look at the how the structure of the networks through time contribute to the “
 - Extract environmental data from the RMBL
   - at the annual level
     - snowfall
-    - snowmelt date (primary candidate for H3)
+    - snowmelt date
   - at the site level
     - elevation
     - surrounding habitat
@@ -26,7 +26,7 @@ Look at the how the structure of the networks through time contribute to the “
     - mean temp
     - max temp
     - min temp
-    - temp range (primary candidate for H3)
+    - temp range 
     - precipitation
     - other important contributions to pollinator activity
 - Community context data
