@@ -1,5 +1,9 @@
 # Project Plan
 
+## Data quality flags
+
+**Copper.Creek 2022 week 11** — 35 rows in `bee_flw_data.csv` are labeled `week = 11` but each falls on a different date spanning doy 205–247 (~6 calendar weeks). Every other site-week has a single survey visit with many observations; these rows each have exactly 1 observation. The correct week assignment cannot be determined from the data alone. These rows are excluded in `analysis/01_data_prep/01_build_weekly_matrices.R` pending clarification from Paul CaraDonna.
+
 Look at the how the structure of the networks through time contribute to the “ecological feasibility” of the plants and pollinators working within them (i.e., the ability to maintain positive abundances with perturbation).
 
 ## Research plan

@@ -2,11 +2,13 @@
 # Computes feasibility domain Ω and rescaled structural stability ω for each
 # weekly bee × plant interaction matrix.
 #
-# Method: Song & Saavedra (2018) Proc. R. Soc. B 285:20180767
-#   - Binarize observed interaction matrix M
+# Method: Song & Saavedra (2018) Proc. R. Soc. B 285:20180767, extended to
+# weighted interaction matrices (interaction rates in visits/minute).
+#   - Use observed interaction rates directly as M (not binarized)
 #   - Build full S×S mutualistic community matrix A
 #       a_ij = γ * m_ij / k_i^δ  (off-diagonal mutualistic effects)
 #       a_ii = -1                  (self-regulation; no intra-trophic competition)
+#       k_i  = sum of interaction rates for species i (total interaction strength)
 #       δ = 0.5  (mutualistic trade-off; robust to values in (0,1))
 #       γ = 1 / spectral_radius(normalized off-diagonal matrix)
 #   - Σ = 2 * (AᵀA)⁻¹
@@ -28,41 +30,26 @@ DELTA <- 0.5  # mutualistic trade-off (Song & Saavedra 2018)
 
 build_community_matrix <- function(M_bee_plant) {
   # M_bee_plant: rows = bee species, cols = plant species, values = interaction_rate
-  # Returns list(A = S_eff×S_eff community matrix, S_eff = effective species count),
-  # or NULL if degenerate.
-  #
-  # Species with identical binary interaction profiles occupy the same structural
-  # position in the LV model (their column vectors in A are identical, making A
-  # rank-deficient). We collapse duplicates to unique profiles before building A,
-  # reducing S to S_eff. ω is computed on S_eff; S (actual richness) is tracked
-  # separately.
+  # Returns list(A = S×S community matrix, S_eff = S) or NULL if degenerate.
 
-  # Binarize: any positive rate → 1 (method uses presence/absence of interactions)
-  M_bin <- (M_bee_plant > 0) * 1
+  # Drop species with zero total interaction rate
+  M <- M_bee_plant[rowSums(M_bee_plant) > 0, colSums(M_bee_plant) > 0, drop = FALSE]
 
-  # Drop any species with zero interactions after binarization (safeguard)
-  M_bin <- M_bin[rowSums(M_bin) > 0, colSums(M_bin) > 0, drop = FALSE]
-
-  # Collapse species with identical interaction profiles (duplicate rows = bees,
-  # duplicate cols = plants). Duplicates create linearly dependent columns in A.
-  M_bin <- M_bin[!duplicated(M_bin),      , drop = FALSE]  # unique bee profiles
-  M_bin <- M_bin[, !duplicated(t(M_bin)),   drop = FALSE]  # unique plant profiles
-
-  n_b <- nrow(M_bin)  # unique bee structural positions
-  n_p <- ncol(M_bin)  # unique plant structural positions
-  S   <- n_b + n_p    # S_eff: effective species count
+  n_b <- nrow(M)
+  n_p <- ncol(M)
+  S   <- n_b + n_p
 
   if (S < 2) return(NULL)
 
-  # Degrees
-  k_b <- rowSums(M_bin)  # number of plant partners per bee
-  k_p <- colSums(M_bin)  # number of bee partners per plant
+  # Degrees: total interaction strength per species (sum of rates, not binary count)
+  k_b <- rowSums(M)  # total visitation rate per bee species
+  k_p <- colSums(M)  # total visitation rate per plant species
 
   # Normalized interaction blocks (without γ):
-  # Effect of plants on bee i:  row i of M_bin divided by k_b[i]^δ
-  N_b <- sweep(M_bin,    1, k_b^DELTA, "/")   # n_b × n_p
-  # Effect of bees on plant j:  row j of t(M_bin) divided by k_p[j]^δ
-  N_p <- sweep(t(M_bin), 1, k_p^DELTA, "/")   # n_p × n_b
+  # Effect of plants on bee i:  row i of M divided by k_b[i]^δ
+  N_b <- sweep(M,    1, k_b^DELTA, "/")   # n_b × n_p
+  # Effect of bees on plant j:  row j of t(M) divided by k_p[j]^δ
+  N_p <- sweep(t(M), 1, k_p^DELTA, "/")   # n_p × n_b
 
   # Full off-diagonal block matrix B, species order: [bees, plants]
   # [bees  × bees  = 0,   bees  × plants = N_b]

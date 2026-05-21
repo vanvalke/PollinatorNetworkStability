@@ -11,16 +11,15 @@ library(tidyr)
 raw <- read_csv("data/bee_flw_data.csv", show_col_types = FALSE) |>
   mutate(week = as.integer(floor(week)))
 
-# Copper.Creek 2022 week 11 has 35 observations each on a different date spanning
-# ~6 calendar weeks — a clear week-labeling error in the source data. Exclude it.
+# DATA QUALITY ISSUE — Copper.Creek 2022 week 11:
+# 35 rows each recorded on a different date (doy 205–247, spanning ~6 calendar
+# weeks) with exactly 1 observation per date. Every other site-week has one
+# survey visit with many observations. The correct week for these rows cannot
+# be determined from the data alone; folding them into adjacent weeks via
+# nearest-doy assignment inflates apparent sampling effort 6–8× for weeks 12–17.
+# Dropped pending clarification from Paul CaraDonna.
 raw <- raw |>
-  anti_join(
-    raw |>
-      group_by(site.code, year, week) |>
-      summarise(n_dates = n_distinct(date), .groups = "drop") |>
-      filter(n_dates > 2),
-    by = c("site.code", "year", "week")
-  )
+  filter(!(site.code == "CC" & year == 2022 & week == 11))
 
 # Effort: total observation minutes per (site, year, week) from ALL behaviors so
 # that bouts with no foraging interactions are not silently dropped.
